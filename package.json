@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "A desktop progress bar widget for tracking task completion",
   "main": "src/main/main.js",
-  "author": "Progress Widget Team",
+  "author": {
+    "name": "Progress Widget Team",
+    "email": "dev@progresswidget.app"
+  },
   "license": "MIT",
   "scripts": {
     "dev": "electron .",
@@ -21,6 +24,7 @@
   "build": {
     "appId": "com.progresswidget.app",
     "productName": "进度小组件",
+    "publish": null,
     "directories": {
       "output": "dist"
     },
