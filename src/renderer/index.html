@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+  <title>Progress Widget</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 主容器 -->
+  <div id="app" class="theme-dark">
+    
+    <!-- 标题栏（可拖拽区域） -->
+    <div class="titlebar" id="titlebar">
+      <div class="title-text" id="title-text">Progress Widget</div>
+      <div class="titlebar-buttons">
+        <button class="btn-icon btn-settings" id="btn-settings" title="Settings">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+        <button class="btn-icon btn-minimize" id="btn-minimize" title="Hide to tray">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+        <button class="btn-icon btn-close" id="btn-close" title="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 主界面 -->
+    <div class="main-view" id="main-view">
+      <!-- 双进度显示 -->
+      <div class="dual-progress">
+        <!-- 月度进度 -->
+        <div class="progress-section" data-track="monthly">
+          <div class="progress-info">
+            <span class="track-label" id="monthly-label">月度进度</span>
+            <span class="month-indicator" id="month-indicator">12月</span>
+            <span class="percent" id="monthly-percent">0.0%</span>
+            <span class="values" id="monthly-values">0 / 100</span>
+          </div>
+          <div class="progress-bar-row">
+            <div class="progress-bar-container">
+              <div class="progress-bar" id="monthly-bar"></div>
+            </div>
+            <span class="bonus-indicator hidden" id="monthly-bonus">+0%</span>
+          </div>
+        </div>
+
+        <!-- 年度进度 -->
+        <div class="progress-section" data-track="yearly">
+          <div class="progress-info">
+            <span class="track-label" id="yearly-label">年度进度</span>
+            <span class="percent yearly-percent" id="yearly-percent">0.0%</span>
+            <span class="values" id="yearly-values">0 / 1000</span>
+          </div>
+          <div class="progress-bar-row">
+            <div class="progress-bar-container">
+              <div class="progress-bar yearly-bar" id="yearly-bar"></div>
+            </div>
+            <span class="bonus-indicator hidden" id="yearly-bonus">+0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 输入区 -->
+      <div class="input-section">
+        <input type="text" id="delta-input" class="delta-input" placeholder="输入增量..." autocomplete="off">
+        <button class="btn-add" id="btn-add">添加</button>
+        <button class="btn-undo" id="btn-undo" title="撤销上一次操作">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7v6h6"></path>
+            <path d="M3 13a9 9 0 1 0 2.25-6.36L3 7"></path>
+          </svg>
+        </button>
+        <button class="btn-icon btn-history" id="btn-history" title="查看历史月度">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Toast 提示 -->
+      <div class="toast" id="toast"></div>
+    </div>
+
+    <!-- 历史月度界面 -->
+    <div class="history-view hidden" id="history-view">
+      <div class="history-header">
+        <h3>历史月度记录</h3>
+        <div class="history-actions">
+          <button class="btn-icon" id="btn-keep-yearly" title="保留年记录（归档当前月度并重置）">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+          </button>
+          <button class="btn-icon btn-danger" id="btn-clear-history" title="清除所有历史记录">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="history-list" id="history-list">
+        <!-- 动态填充 -->
+      </div>
+      <button class="btn-back" id="btn-history-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        返回
+      </button>
+    </div>
+
+    <!-- 设置界面 -->
+    <div class="settings-view hidden" id="settings-view">
+      <div class="settings-scroll">
+        <!-- 月度管理 -->
+        <div class="setting-group">
+          <label class="setting-label">月度管理</label>
+          <div class="setting-row">
+            <span class="current-month" id="current-month-display">2025年12月</span>
+            <button class="btn-small btn-new-month" id="btn-new-month">开始下月</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-toggle">
+            <span>每月1号自动开始新月</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-auto-new-month" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 选择要设置的进度 -->
+        <div class="setting-group">
+          <label class="setting-label">编辑进度</label>
+          <select id="setting-track-select" class="setting-input">
+            <option value="monthly">月度进度</option>
+            <option value="yearly">年度进度</option>
+          </select>
+        </div>
+
+        <!-- 标题设置 -->
+        <div class="setting-group">
+          <label class="setting-label">标题</label>
+          <input type="text" id="setting-title" class="setting-input" placeholder="进度标题">
+        </div>
+
+        <!-- 目标值设置 -->
+        <div class="setting-group">
+          <label class="setting-label">目标值</label>
+          <input type="number" id="setting-total" class="setting-input" min="0.1" step="any" placeholder="100">
+        </div>
+
+        <!-- 手动设置当前值 -->
+        <div class="setting-group">
+          <label class="setting-label">设置当前值</label>
+          <div class="setting-row">
+            <input type="number" id="setting-current" class="setting-input" min="0" step="any" placeholder="0">
+            <button class="btn-small" id="btn-set-current">设置</button>
+          </div>
+        </div>
+
+        <!-- 开关选项 -->
+        <div class="setting-group">
+          <div class="setting-toggle">
+            <span>窗口置顶</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-always-on-top">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-toggle">
+            <span>锁定位置</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-lock-position">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-toggle">
+            <span>鼠标穿透</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-click-through">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-hint">使用 Ctrl+Shift+T 或托盘菜单关闭</div>
+        </div>
+
+        <!-- 透明度 -->
+        <div class="setting-group">
+          <label class="setting-label">透明度: <span id="opacity-value">100%</span></label>
+          <input type="range" id="setting-opacity" class="setting-range" min="30" max="100" value="100">
+        </div>
+
+        <!-- 主题 -->
+        <div class="setting-group">
+          <label class="setting-label">主题</label>
+          <div class="theme-buttons">
+            <button class="btn-theme" id="btn-theme-dark" data-theme="dark">深色</button>
+            <button class="btn-theme" id="btn-theme-light" data-theme="light">浅色</button>
+          </div>
+        </div>
+
+        <!-- 控制按钮 -->
+        <div class="setting-group setting-actions">
+          <button class="btn-danger" id="btn-reset">重置当前进度</button>
+        </div>
+      </div>
+
+      <!-- 返回按钮 -->
+      <button class="btn-back" id="btn-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        返回
+      </button>
+    </div>
+
+    <!-- 自定义确认对话框 -->
+    <div class="confirm-dialog hidden" id="confirm-dialog">
+      <div class="confirm-content">
+        <p class="confirm-message" id="confirm-message">确定要执行此操作吗？</p>
+        <div class="confirm-buttons">
+          <button class="btn-confirm-cancel" id="btn-confirm-cancel">取消</button>
+          <button class="btn-confirm-ok" id="btn-confirm-ok">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

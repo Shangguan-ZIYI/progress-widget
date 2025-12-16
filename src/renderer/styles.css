@@ -1,0 +1,992 @@
+/**
+ * Progress Widget - 样式表
+ * 包含深色/浅色主题、进度条动画、现代化UI设计
+ */
+
+/* ==================== 基础重置 ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+  font-size: 14px;
+  user-select: none;
+  background: transparent;
+}
+
+/* ==================== 主容器 ==================== */
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ==================== 悬停展开效果 ==================== */
+/* 默认收起状态：只显示进度条区域 */
+#app.collapsed .titlebar {
+  opacity: 0;
+  height: 0;
+  padding: 0 12px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#app.collapsed .input-section {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#app.collapsed .main-view {
+  padding: 8px 12px;
+}
+
+#app.collapsed .dual-progress {
+  gap: 8px;
+}
+
+#app.collapsed .progress-section {
+  margin-bottom: 0;
+}
+
+#app.collapsed .track-label,
+#app.collapsed .month-indicator {
+  display: none;
+}
+
+#app.collapsed .values {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+#app.collapsed .progress-info {
+  margin-bottom: 4px;
+  gap: 6px;
+}
+
+#app.collapsed .percent {
+  font-size: 16px;
+}
+
+#app.collapsed .progress-bar-container {
+  height: 8px;
+}
+
+/* 悬停时展开 */
+#app:hover .titlebar,
+#app.settings-open .titlebar,
+#app.history-open .titlebar {
+  opacity: 1;
+  height: auto;
+  padding: 8px 12px;
+  pointer-events: auto;
+}
+
+#app:hover .input-section,
+#app.settings-open .input-section,
+#app.history-open .input-section {
+  opacity: 1;
+  height: auto;
+  pointer-events: auto;
+}
+
+#app:hover .main-view,
+#app.settings-open .main-view,
+#app.history-open .main-view {
+  padding: 10px 14px 12px;
+}
+
+#app:hover .dual-progress,
+#app.settings-open .dual-progress,
+#app.history-open .dual-progress {
+  gap: 10px;
+}
+
+#app:hover .progress-section,
+#app.settings-open .progress-section,
+#app.history-open .progress-section {
+  margin-bottom: 0;
+}
+
+#app:hover .track-label,
+#app.settings-open .track-label,
+#app.history-open .track-label {
+  display: inline;
+}
+
+#app:hover .month-indicator,
+#app.settings-open .month-indicator,
+#app.history-open .month-indicator {
+  display: inline;
+}
+
+#app:hover .progress-info,
+#app.settings-open .progress-info,
+#app.history-open .progress-info {
+  margin-bottom: 5px;
+  gap: 8px;
+}
+
+#app:hover .percent,
+#app.settings-open .percent,
+#app.history-open .percent {
+  font-size: 20px;
+}
+
+#app:hover .values,
+#app.settings-open .values,
+#app.history-open .values {
+  opacity: 1;
+  width: auto;
+}
+
+#app:hover .progress-bar-container,
+#app.settings-open .progress-bar-container,
+#app.history-open .progress-bar-container {
+  height: 10px;
+}
+
+/* ==================== 深色主题 ==================== */
+.theme-dark {
+  --bg-primary: rgba(30, 30, 35, 0.95);
+  --bg-secondary: rgba(45, 45, 50, 0.9);
+  --bg-input: rgba(60, 60, 65, 0.8);
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a5;
+  --text-muted: #707075;
+  --accent: #4ade80;
+  --accent-hover: #22c55e;
+  --accent-glow: rgba(74, 222, 128, 0.3);
+  --accent-secondary: #f59e0b;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --border: rgba(255, 255, 255, 0.1);
+  --progress-bg: rgba(255, 255, 255, 0.1);
+  --progress-fill: linear-gradient(90deg, #4ade80, #22d3ee);
+  --btn-hover: rgba(255, 255, 255, 0.1);
+}
+
+/* ==================== 浅色主题 ==================== */
+.theme-light {
+  --bg-primary: rgba(250, 250, 252, 0.95);
+  --bg-secondary: rgba(240, 240, 245, 0.9);
+  --bg-input: rgba(230, 230, 235, 0.8);
+  --text-primary: #1a1a1a;
+  --text-secondary: #505055;
+  --text-muted: #909095;
+  --accent: #22c55e;
+  --accent-hover: #16a34a;
+  --accent-glow: rgba(34, 197, 94, 0.3);
+  --accent-secondary: #d97706;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --border: rgba(0, 0, 0, 0.1);
+  --progress-bg: rgba(0, 0, 0, 0.1);
+  --progress-fill: linear-gradient(90deg, #22c55e, #0891b2);
+  --btn-hover: rgba(0, 0, 0, 0.05);
+}
+
+#app {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* ==================== 标题栏 ==================== */
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  -webkit-app-region: drag; /* 允许拖拽 */
+  cursor: move;
+  transition: all 0.25s ease;
+}
+
+.title-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.titlebar-buttons {
+  display: flex;
+  gap: 4px;
+  -webkit-app-region: no-drag; /* 按钮不可拖拽 */
+}
+
+.btn-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  background: var(--btn-hover);
+  color: var(--text-primary);
+}
+
+.btn-close:hover {
+  background: var(--danger);
+  color: white;
+}
+
+/* ==================== 主界面 ==================== */
+.main-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px 12px;
+  position: relative;
+  transition: padding 0.2s ease;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==================== 双进度显示 ==================== */
+.dual-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.progress-section {
+  margin-bottom: 0;
+  transition: margin 0.2s ease;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 5px;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.track-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  min-width: 50px;
+  flex-shrink: 0;
+}
+
+.month-indicator {
+  font-size: 11px;
+  color: var(--accent-secondary);
+  background: rgba(245, 158, 11, 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.percent {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+  transition: font-size 0.2s ease;
+  white-space: nowrap;
+}
+
+.yearly-percent {
+  color: var(--accent-secondary);
+}
+
+.values {
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: opacity 0.2s ease, width 0.2s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.progress-bar-container {
+  flex: 1;
+  height: 10px;
+  background: var(--progress-bg);
+  border-radius: 5px;
+  overflow: hidden;
+  transition: height 0.2s ease;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--progress-fill);
+  border-radius: 5px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+
+/* 年度进度条使用不同颜色 */
+.yearly-bar {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+/* Bonus 显示（月度超额） */
+.progress-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.bonus-indicator {
+  font-size: 11px;
+  color: #10b981;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(16, 185, 129, 0.5);
+  flex-shrink: 0;
+}
+
+.bonus-indicator.hidden {
+  display: none;
+}
+
+/* ==================== 输入区 ==================== */
+.input-section {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  transition: all 0.2s ease;
+  margin-top: auto;
+}
+
+.delta-input {
+  flex: 1;
+  height: 32px;
+  padding: 0 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s ease;
+  min-width: 0;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.delta-input::placeholder {
+  color: var(--text-muted);
+}
+
+.delta-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.btn-add {
+  height: 32px;
+  padding: 0 12px;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: #000;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-add:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-add:active {
+  transform: translateY(0);
+}
+
+.btn-undo,
+.btn-history {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-undo:hover,
+.btn-history:hover {
+  background: var(--btn-hover);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+/* ==================== Toast 提示 ==================== */
+.toast {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 11px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  z-index: 100;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.error {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* ==================== 自定义确认对话框 ==================== */
+.confirm-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  border-radius: 12px;
+}
+
+.confirm-dialog.hidden {
+  display: none;
+}
+
+.confirm-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 280px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.confirm-message {
+  font-size: 13px;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.confirm-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn-confirm-cancel,
+.btn-confirm-ok {
+  flex: 1;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-confirm-cancel {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-confirm-cancel:hover {
+  background: var(--btn-hover);
+}
+
+.btn-confirm-ok {
+  background: var(--accent);
+  color: #000;
+}
+
+.btn-confirm-ok:hover {
+  background: var(--accent-hover);
+}
+
+/* ==================== 历史界面 ==================== */
+.history-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  overflow: hidden;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.history-header h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.history-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-icon:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.btn-icon.btn-danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+}
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--bg-input);
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.history-item-date {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.history-item-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.history-item-values {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.history-item-percent {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 45px;
+  text-align: right;
+}
+
+.history-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 20px;
+}
+
+/* ==================== 设置界面 ==================== */
+.settings-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px;
+  overflow: hidden;
+}
+
+.settings-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* 自定义滚动条 */
+.settings-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.settings-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.settings-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.setting-group {
+  margin-bottom: 12px;
+}
+
+.setting-label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.setting-input {
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Select 下拉框样式 */
+select.setting-input {
+  cursor: pointer;
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+select.setting-input option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 8px;
+}
+
+.setting-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.setting-input::placeholder {
+  color: var(--text-muted);
+}
+
+.current-month {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.btn-new-month {
+  background: var(--accent-secondary);
+  color: #000;
+  font-weight: 600;
+}
+
+.btn-new-month:hover {
+  background: #d97706;
+}
+
+/* 移除数字输入框的spinner */
+.setting-input[type="number"]::-webkit-inner-spin-button,
+.setting-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.setting-row {
+  display: flex;
+  gap: 8px;
+}
+
+.setting-row .setting-input {
+  flex: 1;
+}
+
+.btn-small {
+  height: 32px;
+  padding: 0 12px;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: #000;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-small:hover {
+  background: var(--accent-hover);
+}
+
+/* ==================== 开关切换 ==================== */
+.setting-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.setting-toggle span {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  transition: all 0.3s ease;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: var(--text-secondary);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+input:checked + .slider {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+input:checked + .slider:before {
+  background: white;
+  transform: translateX(18px);
+}
+
+.setting-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ==================== 透明度滑杆 ==================== */
+.setting-range {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  background: var(--progress-bg);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.setting-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.setting-range::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* ==================== 主题按钮 ==================== */
+.theme-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-theme {
+  flex: 1;
+  height: 32px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-theme:hover {
+  background: var(--btn-hover);
+}
+
+.btn-theme.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+  font-weight: 600;
+}
+
+/* ==================== 控制按钮 ==================== */
+.setting-actions {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-danger {
+  width: 100%;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: white;
+}
+
+/* ==================== 返回按钮 ==================== */
+.btn-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 36px;
+  margin-top: 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+  background: var(--btn-hover);
+}
+
+/* ==================== 动画 ==================== */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.progress-bar.complete {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ==================== 响应式微调 ==================== */
+@media (max-height: 160px) {
+  .progress-info {
+    margin-bottom: 4px;
+  }
+  
+  .percent {
+    font-size: 24px;
+  }
+  
+  .progress-section {
+    margin-bottom: 8px;
+  }
+}
