@@ -1,11 +1,11 @@
 {
   "name": "progress-widget",
   "version": "1.0.0",
-  "description": "A desktop progress bar widget for tracking task completion",
+  "description": "A desktop progress widget for tracking monthly and yearly goals",
   "main": "src/main/main.js",
   "author": {
-    "name": "Progress Widget Team",
-    "email": "dev@progresswidget.app"
+    "name": "Jay Da",
+    "email": "jayda@globalbiocaretech.com"
   },
   "license": "MIT",
   "scripts": {
@@ -62,10 +62,7 @@
       "identity": null
     },
     "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ],
+      "target": ["AppImage", "deb"],
       "icon": "assets/icon.png",
       "category": "Utility"
     },
